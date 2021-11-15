@@ -10,7 +10,7 @@ class TSP(object):
         self.solution = []
 
     # read tsp file
-    def read_file(self, file_name, seed = 0):
+    def read_file(self, file_name):
         with open('../data/{}.tsp'.format(file_name), 'r') as f:
             name = f.readline().strip().split()[1] 
             comment = f.readline().strip().split()[1] 
