@@ -23,6 +23,7 @@ def main(argv):
             
     if file_name and alg and time >= 0:
         print("inst: ", file_name, " alg: ", alg, " time: ", time, " seed: ", seed)
+        tsp = TSP(file_name, time, seed)
         if alg == 'LS2':
             tsp = LocalSearch2OPT(file_name, time, seed)
         elif alg == 'LS1':
@@ -31,12 +32,11 @@ def main(argv):
             pass
         elif alg == 'Approx':
             pass
-        else: 
-            tsp = TSP(file_name, time, seed)
         
         tsp.main()
         print("solution: ", tsp.solution)
         print("quality: ", tsp.total_distance)
+        print("trace: ", tsp.trace)
         
     else:
         print('Invalid input')
