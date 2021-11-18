@@ -1,5 +1,6 @@
 import sys, getopt
 from local_search_2 import LocalSearch2OPT
+from sa import SimulatedAnnealing
 from tsp import TSP
 
 def main(argv):
@@ -21,7 +22,7 @@ def main(argv):
         if alg == 'LS2':
             tsp = LocalSearch2OPT(file_name, time, seed)
         elif alg == 'LS1':
-            pass
+            tsp = SimulatedAnnealing(file_name, time, seed)
         elif alg == 'BnB':
             pass
         elif alg == 'Approx':
