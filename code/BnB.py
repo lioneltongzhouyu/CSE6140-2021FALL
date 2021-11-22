@@ -23,10 +23,10 @@ class Node:
             return False
 
 
-class LocalSearch2OPT(TSP):
+class BnB(TSP):
     
     def __init__(self, file_name, time, seed = 0):
-        super(LocalSearch2OPT, self).__init__(file_name, time, seed)
+        super(BnB, self).__init__(file_name, time, seed)
         self.method = 'BnB'
         self.distance_matrix = None
         
@@ -113,6 +113,6 @@ class LocalSearch2OPT(TSP):
         self.gen_outputs()
     
 if __name__ == '__main__':
-    ls2 = LocalSearch2OPT('Atlanta', 1)
+    ls2 = BnB('Atlanta', 1)
     ls2.main()
     print(ls2.nodes, ls2.seed, ls2.solution, ls2.total_distance)
