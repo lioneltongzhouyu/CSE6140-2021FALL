@@ -18,8 +18,9 @@ class TSP(object):
 
     # read tsp file
     def read_file(self, file_name):
+        self.location = file_name.split('/')[-1].split('.')[0]
         with open('{}'.format(file_name), 'r') as f:
-            self.location = f.readline().strip().split()[1]
+            name = f.readline().strip().split()[1]
             comment = f.readline().strip().split()[1]
             dimension = f.readline().strip().split()[1]
             edge_weight_type = f.readline().strip().split()[1]
