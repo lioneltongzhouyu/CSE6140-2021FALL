@@ -25,8 +25,8 @@ class Node:
 
 
 class BnB(TSP):
-    
-    def __init__(self, file_name, time, seed = 0):
+
+    def __init__(self, file_name, time, seed=0):
         super(BnB, self).__init__(file_name, time, seed)
         n = len(self.nodes)
         self.method = 'BnB'
@@ -36,7 +36,7 @@ class BnB(TSP):
     # calculate distance between every 2 nodes
     def calc_distanca_matrix(self):
         n = len(self.nodes)
-        self.distance_matrix = [[ 0 for _ in range(n)] for _ in range(n)]
+        self.distance_matrix = [[0 for _ in range(n)] for _ in range(n)]
         for i in range(n):
             for j in range(i + 1, n):
                 distance = round(dist(self.nodes[i], self.nodes[j]))
@@ -49,7 +49,7 @@ class BnB(TSP):
         self.min_distance = [float('inf') for _ in range(n)]
         for i in range(n):
             for j in range(n):
-                if self.distance_matrix[i][j] !=0 and self.distance_matrix[i][j] < self.min_distance[i]:
+                if self.distance_matrix[i][j] != 0 and self.distance_matrix[i][j] < self.min_distance[i]:
                     self.min_distance[i] = self.distance_matrix[i][j]
 
     # calculate the total distance of current solution
@@ -114,8 +114,10 @@ class BnB(TSP):
                             temp.path.append(i)
                     if temp.compute_length(self.distance_matrix) + self.distance_matrix[temp.path[-1]][0] < self.total_distance:
                         self.solution = temp.path
-                        self.total_distance = temp.compute_length(self.distance_matrix) + self.distance_matrix[temp.path[-1]][0]
-                        self.trace.append(("%.2f" % time_cost, self.total_distance))
+                        self.total_distance = temp.compute_length(
+                            self.distance_matrix) + self.distance_matrix[temp.path[-1]][0]
+                        self.trace.append(
+                            ("%.2f" % time_cost, self.total_distance))
                 else:
                     temp_path = temp.path[:]
                     for i in range(n):
@@ -129,7 +131,7 @@ class BnB(TSP):
                             temp_path.pop()
         time_cost = time.time() - start_time
         print("time_cost: " + str(time_cost))
-    
+
     def main(self):
         self.read_file(self.file_name)
         self.calc_distanca_matrix()
@@ -139,6 +141,6 @@ class BnB(TSP):
 
 
 if __name__ == '__main__':
-    ls2 = BnB('UKansasState', 3)
+    ls2 = BnB('../data/Atlanta.tsp', 3)
     ls2.main()
     print(ls2.nodes, ls2.seed, ls2.solution, ls2.total_distance)

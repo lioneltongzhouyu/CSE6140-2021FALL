@@ -1,3 +1,2 @@
-*.sol
-*.trace
+output/
 __pycache__
