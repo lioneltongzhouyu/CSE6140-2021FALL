@@ -10,7 +10,7 @@ class MST_APPROX(TSP):
 
     def __init__(self, file_name, time, begin):
         super(MST_APPROX, self).__init__(file_name, time)
-        self.method = 'MST_APPROX'
+        self.method = 'Approx'
         self.total_distance = 0
         self.begin = begin
 
@@ -52,20 +52,22 @@ class MST_APPROX(TSP):
         return ret
 
     def trace_MST(self):
+        start_time = time.time()
+        self.MST_prim()
         self.solution = self.preorder(self.begin) + [self.begin]
         for u, v in zip(self.solution[:-1], self.solution[1:]):
             self.total_distance += self.distance_matrix[u][v]
+        self.trace.append(
+            ("%.2f" % (time.time() - start_time), self.total_distance))
 
     def main(self):
         self.read_file(self.file_name)
         self.calc_distanca_matrix()
-        self.MST_prim()
         self.trace_MST()
         self.gen_outputs()
 
 
 if __name__ == '__main__':
-    for i in range(1, 6):
-        ls2 = MST_APPROX('Atlanta', 1, i)
-        ls2.main()
-        print(ls2.solution, ls2.total_distance)
+    ls2 = MST_APPROX('Denver', 1, 1)
+    ls2.main()
+    print(ls2.solution, ls2.total_distance)
