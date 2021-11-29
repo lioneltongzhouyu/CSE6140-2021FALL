@@ -17,12 +17,11 @@ def process_data(p = 0, city = 'Berlin'):
     k = K
     file_name =  city
     # file_name = 'Champaign'
-    method = 'LS2'
+    method = 'LS1'
     time_limit = TIME
-    seed = 1
+    seed = 0
     all_data = []
     for i in range(k):
-        seed = i + 1
         all_data.append([])
         with open('../output/{}_{}_{}_{}.trace'.format(file_name, method, time_limit, seed), 'r') as f:
             lines = f.readlines()
@@ -30,7 +29,8 @@ def process_data(p = 0, city = 'Berlin'):
                 runtime, quality = line.strip().split(',')
                 all_data[i].append((float(runtime), int(quality)))
                 # print(runtime, quality)
-    
+        seed = i + 1
+
     # print(all_data)
     
     probability = p
@@ -110,7 +110,18 @@ def draw_boxplot(city):
     plt.boxplot(data)
     plt.savefig("boxplot_{}.png".format(city))
     # print(data)
-    
+
+def draw_quality_box(city, val, label):
+    method = 'SA'
+    fig, ax = plt.subplots()
+    ax.boxplot(val)
+    ax.set_xticklabels(label)
+    plt.title('{} {}'.format(city, method))
+    plt.xlabel('Solution Quality')
+    plt.ylabel('Solving time')
+    plt.savefig("quality_boxplot_{}_{}.png".format(city, method))
+    plt.show()
+
 def run_tsp(city):
 
     sum = 0
@@ -130,27 +141,42 @@ if __name__ == '__main__':
     
     # run_tsp('Berlin')
     # run_tsp('Champaign')
+    # runtime_list0 = process_data(0, 'Berlin')
+    # runtime_list2 = process_data(0.02)
+    # runtime_list4 = process_data(0.04)
+    # runtime_list6 = process_data(0.06)
+    # runtime_list8 = process_data(0.08)
     
-    runtime_list0 = process_data(0, 'Berlin')
-    runtime_list2 = process_data(0.02)
-    runtime_list4 = process_data(0.04)
-    runtime_list6 = process_data(0.06)
-    runtime_list8 = process_data(0.08)
-    
-    draw_plot(runtime_list0, runtime_list2, runtime_list4, runtime_list6, runtime_list8, 'Berlin')
-    
-    
-    runtime_list0 = process_data(0, 'Champaign')
-    runtime_list2 = process_data(0.02, 'Champaign')
-    runtime_list4 = process_data(0.04, 'Champaign')
-    runtime_list6 = process_data(0.06, 'Champaign')
-    runtime_list8 = process_data(0.08, 'Champaign')
-    
-    draw_plot(runtime_list0, runtime_list2, runtime_list4, runtime_list6, runtime_list8, city='Champaign')
+    # draw_plot(runtime_list0, runtime_list2, runtime_list4, runtime_list6, runtime_list8, 'Berlin')
     
     
+    # runtime_list0 = process_data(0, 'Champaign')
+    # runtime_list2 = process_data(0.02, 'Champaign')
+    # runtime_list4 = process_data(0.04, 'Champaign')
+    # runtime_list6 = process_data(0.06, 'Champaign')
+    # runtime_list8 = process_data(0.08, 'Champaign')
     
-    draw_boxplot('Berlin')
-    draw_boxplot('Champaign')
+    # draw_plot(runtime_list0, runtime_list2, runtime_list4, runtime_list6, runtime_list8, city='Champaign')
+    
+    
+    
+    # draw_boxplot('Berlin')
+    # draw_boxplot('Champaign')
+
+    # box plot
+    runtime_list2 = process_data(0.002)
+    runtime_list4 = process_data(0.008)
+    runtime_list6 = process_data(0.02)
+    runtime_list8 = process_data(0.05)
+    draw_quality_box("Berlin", [runtime_list2, runtime_list4, runtime_list6, runtime_list8],
+    ['0.5%','0.8%','2%','5%'])
+
+    runtime_list2 = process_data(0.002, 'Champaign')
+    runtime_list4 = process_data(0.008, 'Champaign')
+    runtime_list6 = process_data(0.02, 'Champaign')
+    runtime_list8 = process_data(0.05, 'Champaign')
+    
+    draw_quality_box("Champaign", [runtime_list2, runtime_list4, runtime_list6, runtime_list8],
+    ['0.2%','0.8%','2%','5%'])
         
     
