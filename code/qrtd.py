@@ -134,9 +134,11 @@ def process_sqd_data(time = 0.2, city = 'Berlin', method ='LS2'):
     for i in range(k):
         data = all_data[i]
         for runtime, quality in data:
-            if runtime > time:
-                quality_list.append((quality - optimal[city]) * 100 / optimal[city])
+            if runtime < time:
+                prev_quality = quality
+            else:
                 break
+        quality_list.append((prev_quality - optimal[city]) * 100 / optimal[city])
             
     quality_list.sort()
     return quality_list
@@ -164,11 +166,11 @@ def draw_sqd_plot(quality_list0, quality_list2, quality_list4, quality_list6, qu
     
     plt.figure()
     
-    plt.plot(x0, y0, label="2s", linewidth=2)
-    plt.plot(x2, y2, label="4s", linewidth=2)
-    plt.plot(x4, y4, label="6s", linewidth=2)
-    plt.plot(x6, y6, label="8s", linewidth=2)
-    plt.plot(x8, y8, label="10s", linewidth=2)
+    plt.plot(x0, y0, label="1s", linewidth=2)
+    plt.plot(x2, y2, label="3s", linewidth=2)
+    plt.plot(x4, y4, label="10s", linewidth=2)
+    plt.plot(x6, y6, label="30s", linewidth=2)
+    plt.plot(x8, y8, label="100s", linewidth=2)
     
     # plt.xlim((0, 100))
     plt.title('{} {}'.format(city, method))
@@ -249,19 +251,19 @@ if __name__ == '__main__':
         
     
     
-    quality_list_0 = process_sqd_data(2, 'Berlin')
-    quality_list_2 = process_sqd_data(4)
-    quality_list_4 = process_sqd_data(6)
-    quality_list_6 = process_sqd_data(8)
-    quality_list_8 = process_sqd_data(10)
+    quality_list_0 = process_sqd_data(1, 'Berlin')
+    quality_list_2 = process_sqd_data(3)
+    quality_list_4 = process_sqd_data(10)
+    quality_list_6 = process_sqd_data(30)
+    quality_list_8 = process_sqd_data(100)
     
     draw_sqd_plot(quality_list_0, quality_list_2, quality_list_4, quality_list_6, quality_list_8, 'Berlin')
     
     
-    quality_list_0 = process_sqd_data(2, 'Champaign')
-    quality_list_2 = process_sqd_data(4, 'Champaign')
-    quality_list_4 = process_sqd_data(6, 'Champaign')
-    quality_list_6 = process_sqd_data(8, 'Champaign')
-    quality_list_8 = process_sqd_data(10, 'Champaign')
+    quality_list_0 = process_sqd_data(1, 'Champaign')
+    quality_list_2 = process_sqd_data(3, 'Champaign')
+    quality_list_4 = process_sqd_data(10, 'Champaign')
+    quality_list_6 = process_sqd_data(30, 'Champaign')
+    quality_list_8 = process_sqd_data(100, 'Champaign')
     
     draw_sqd_plot(quality_list_0, quality_list_2, quality_list_4, quality_list_6, quality_list_8, city='Champaign')
