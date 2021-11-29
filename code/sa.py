@@ -13,7 +13,7 @@ class SimulatedAnnealing(TSP):
         self.method = 'LS1'
         self.distance_matrix = None
         self.temperature = 10000
-        self.ALPHA = 0.98
+        self.ALPHA = 0.95
         self.total_distance = None
         self.attemps = 0
         self.changes = 0
