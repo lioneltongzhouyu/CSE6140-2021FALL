@@ -1,8 +1,8 @@
 import random
 import time
-from math import dist
 from tsp import TSP
 import math
+import numpy as np
 
 
 # local search 1: simulated annealing
@@ -12,69 +12,103 @@ class SimulatedAnnealing(TSP):
         super(SimulatedAnnealing, self).__init__(file_name, time, seed)
         self.method = 'LS1'
         self.distance_matrix = None
-        self.temperature = 500000
+        self.temperature = 10000
+        self.ALPHA = 0.98
+        self.total_distance = None
+        self.attemps = 0
+        self.changes = 0
         self.iter = 0
-        self.ALPHA = 0.998
-        self.STOPPING_TEMP = 1e-5
-        self.MAX_ITER = 10000
-
-    # calculate distance between every 2 nodes
-    def calc_distanca_matrix(self):
-        n = len(self.nodes)
-        self.distance_matrix = [[0 for _ in range(n)] for _ in range(n)]
-        for i in range(n):
-            for j in range(i + 1, n):
-                distance = round(dist(self.nodes[i], self.nodes[j]))
-                self.distance_matrix[i][j] = distance
-                self.distance_matrix[j][i] = distance
-
-    # generate the initial solution
-    def initial_solution(self):
-        random.seed(self.seed)
-        self.solution = [i for i in range(len(self.nodes))]
-        random.shuffle(self.solution)
-        self.total_distance = self.calc_total_distance(self.solution)
-
-    # calculate the total distance
-    def calc_total_distance(self, route):
-        total_distance = 0
-        for i in range(0, len(route)):
-            edge = route[i - 1], route[i]
-            total_distance += self.distance_matrix[edge[0]][edge[1]]
-        return total_distance
+        self.start_time = 0
+        self.first = True
 
     # calculate the acceptance criterion
-    def metropolis(self, route):
-        return math.exp(-abs(self.calc_total_distance(route) - self.total_distance) / self.temperature)
+    def metropolis(self, dist1, dist2):
+        if self.temperature < 1e-25:
+            return 0
+        return math.exp(-abs(dist1 - dist2) / self.temperature)
 
-    # generate and evaluate the random successor
-    def successor(self):
-        n = len(self.nodes)
+    # generate a random neighbor
+    def random_neighbor(self):
         random_successor = list(self.solution)
-        i, j = random.sample(range(0, n), 2)
-        random_successor[i:j + 1] = reversed(random_successor[i: j + 1])
-        route_distance = self.calc_total_distance(random_successor)
-        if route_distance < self.total_distance or random.random() < self.metropolis(random_successor):
-            self.total_distance = route_distance
-            self.solution = random_successor
-        self.temperature = self.ALPHA * self.temperature
-        self.iter += 1
+        n = len(random_successor)
+        ln = random.randint(1, n - 1)
+        i = random.randint(1, n - ln)
+        random_successor[i:i + ln] = reversed(random_successor[i: i + ln])
+        return random_successor
 
-    # core function
+    # parameters setting
+    def para(self):
+        vertices = len(self.nodes)
+        self.attemps = 50 * vertices
+        self.changes = 5 * vertices
+
+    # random neighbor search
+    def search(self, route, distance):
+        na = 0
+        nc = 0
+        n = len(self.nodes)
+        current_route = route[:]
+        current_distance = distance
+        while nc < self.changes and na < self.attemps:
+            random_successor = current_route[:]
+            length = random.randint(1, n - 1)
+            i = random.randint(1, n - length)
+            random_successor[i:i + length] = reversed(random_successor[i: i + length])
+            route_distance = self.calc_total_distance(random_successor)
+            # initial temperature setting
+            if self.first:
+                self.temperature = (-abs(route_distance - current_distance)/np.log(0.9))
+                self.first = False
+            self.temperature = self.temperature * self.ALPHA
+            if route_distance < current_distance or random.random() < self.metropolis(route_distance, current_distance):
+                current_distance = route_distance
+                current_route = random_successor
+                nc += 1
+                if current_distance < self.total_distance:
+                    self.trace.append(
+                        ("%.2f" % (time.time() - self.start_time), current_distance))
+                    self.total_distance = current_distance
+                    self.solution = current_route[:]
+            na += 1
+        return current_route, current_distance
+
     def simulated_anneal(self):
-        start_time = time.time()
-        self.initial_solution()
-        while (self.temperature > self.STOPPING_TEMP) and (self.iter < self.MAX_ITER) \
-                and (time.time() - start_time) < self.time:
-            self.successor()
+        self.start_time = time.time()
+        not_improved = 0
+        max_iter_reheat = 5000
+        prev_dist = self.total_distance
+        prev_route = self.solution[:]
+        while not_improved < max_iter_reheat and self.iter < 1e6:
+            time_diff = time.time() - self.start_time
+            new_route, new_distance = self.search(prev_route, prev_dist)
+            self.iter += 1
+            if time_diff > self.time:
+                break
+            if new_distance != prev_dist:
+                prev_route = new_route
+                prev_dist = new_distance
+                if prev_dist < self.total_distance:
+                    # self.trace.append(
+                    #     ("%.2f" % time_diff, prev_dist))
+                    # self.total_distance = prev_dist
+                    # self.solution = new_route[:]
+                    not_improved = 0
+            else:
+                random.shuffle(prev_route)
+                prev_dist = self.calc_total_distance(prev_route)
+                self.first = True
+                not_improved += 1
 
     def main(self):
         self.read_file(self.file_name)
         self.calc_distanca_matrix()
+        self.para()
+        self.init_solution()
         self.simulated_anneal()
         self.gen_outputs()
 
+
 if __name__ == '__main__':
-    ls1 = SimulatedAnnealing('Atlanta', 10, 4)
+    ls1 = SimulatedAnnealing('Atlanta', 5)
     ls1.main()
     print(ls1.total_distance)
