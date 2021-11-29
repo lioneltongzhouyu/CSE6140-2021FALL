@@ -9,15 +9,14 @@ TIME = 100
 optimal = {
     'Atlanta': 2003763,
     'Berlin': 7542,
-    'Nyc': 1555060
+    'Nyc': 1555060,
+    'Champaign': 52643
 }
-ATLANTA = 2003763
-BERLIN = 7542
-NYC = 1555060
 
-def process_data(p = 0):
+def process_data(p = 0, city = 'Berlin'):
     k = K
-    file_name = 'Berlin'
+    file_name =  city
+    # file_name = 'Champaign'
     method = 'LS2'
     time_limit = TIME
     seed = 1
@@ -41,7 +40,7 @@ def process_data(p = 0):
         for runtime, quality in data:
             if (quality - optimal[file_name] ) / optimal[file_name] <= probability:
                 runtime_list.append(runtime)
-                print(runtime, p)
+                # print(runtime, p)
                 break
             
     runtime_list.sort()
@@ -49,7 +48,7 @@ def process_data(p = 0):
     return runtime_list
                 
 
-def draw_plot(runtime_list0, runtime_list2, runtime_list4, runtime_list6, runtime_list8):
+def draw_plot(runtime_list0, runtime_list2, runtime_list4, runtime_list6, runtime_list8, city = 'Berlin'):
     n = 50
     x0, x2, x4, x6, x8 = [],[],[],[],[]
     y0, y2, y4, y6, y8 = [],[],[],[],[]
@@ -69,20 +68,48 @@ def draw_plot(runtime_list0, runtime_list2, runtime_list4, runtime_list6, runtim
         y8.append((i+1)/n)
         x8.append(runtime)
     
+    plt.figure()
+    
     plt.plot(x0, y0, label="opt", linewidth=2)
     plt.plot(x2, y2, label="2%", linewidth=2)
     plt.plot(x4, y4, label="4%", linewidth=2)
     plt.plot(x6, y6, label="6%", linewidth=2)
     plt.plot(x8, y8, label="8%", linewidth=2)
     
-    # plt.plot(x, It, label="I(t)", color="green", linewidth=2)
-    # plt.plot(x, Rt, label="R(t)", color="red", linewidth=2)
+    # plt.xlim((0, 100))
+    plt.xscale('log')
     plt.legend() 
+    plt.grid()
     plt.xlabel('run-time[CPU sec]')
     plt.ylabel('P(solve)')
     plt.show()
-    plt.savefig("matplotlib.png")
+    plt.savefig("qrtd{}.png".format(city))
     
+    
+def draw_boxplot(city):
+    k = K
+    file_name = city
+    method = 'LS2'
+    time_limit = TIME
+    seed = 1
+    data = []
+    for i in range(k):
+        seed = i + 1
+
+        with open('../output/{}_{}_{}_{}.trace'.format(file_name, method, time_limit, seed), 'r') as f:
+            lines = f.readlines()
+            last_line = lines[-1]
+            runtime = last_line.strip().split(',')[0]
+            data.append(float(runtime))
+    
+    plt.figure()
+    plt.title('Boxplot of runtime')
+
+    plt.xlabel(city)
+    plt.ylabel('run-time[CPU sec]')
+    plt.boxplot(data)
+    plt.savefig("boxplot_{}.png".format(city))
+    # print(data)
     
 def run_tsp(city):
 
@@ -101,15 +128,29 @@ def run_tsp(city):
 
 if __name__ == '__main__':
     
-    run_tsp('Berlin')
+    # run_tsp('Berlin')
+    # run_tsp('Champaign')
     
-    runtime_list0 = process_data(0)
+    runtime_list0 = process_data(0, 'Berlin')
     runtime_list2 = process_data(0.02)
     runtime_list4 = process_data(0.04)
     runtime_list6 = process_data(0.06)
     runtime_list8 = process_data(0.08)
     
-    draw_plot(runtime_list0, runtime_list2, runtime_list4, runtime_list6, runtime_list8)
+    draw_plot(runtime_list0, runtime_list2, runtime_list4, runtime_list6, runtime_list8, 'Berlin')
     
+    
+    runtime_list0 = process_data(0, 'Champaign')
+    runtime_list2 = process_data(0.02, 'Champaign')
+    runtime_list4 = process_data(0.04, 'Champaign')
+    runtime_list6 = process_data(0.06, 'Champaign')
+    runtime_list8 = process_data(0.08, 'Champaign')
+    
+    draw_plot(runtime_list0, runtime_list2, runtime_list4, runtime_list6, runtime_list8, city='Champaign')
+    
+    
+    
+    draw_boxplot('Berlin')
+    draw_boxplot('Champaign')
         
     

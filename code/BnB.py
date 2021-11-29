@@ -93,13 +93,15 @@ class BnB(TSP):
         return total_distance
 
     def solve(self):
+        start_time = time.time()
         n = len(self.nodes)
         v = Node([0])
         self.total_distance, self.solution = self.initial_solution(v)
+        time_cost = time.time() - start_time
+        self.trace.append(("%.2f" % time_cost, self.total_distance))
         v.bound = self.calculate_bound(v)
         q = []
         heapq.heappush(q, v)
-        start_time = time.time()
         while q:
             temp = heapq.heappop(q)
             bound = temp.bound
