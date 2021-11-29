@@ -2,6 +2,7 @@ import sys, getopt
 from local_search_2 import LocalSearch2OPT
 from sa import SimulatedAnnealing
 from tsp import TSP
+from BnB import BnB
 
 def main(argv):
 
@@ -24,7 +25,7 @@ def main(argv):
         elif alg == 'LS1':
             tsp = SimulatedAnnealing(file_name, time, seed)
         elif alg == 'BnB':
-            pass
+            tsp = BnB(file_name, time, seed)
         elif alg == 'Approx':
             pass
         
