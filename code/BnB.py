@@ -193,11 +193,7 @@ class BnB(TSP):
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-    ls2 = BnB('Berlin', 600)
     # ls2 = BnB('Cincinnati', 10)
-=======
     ls2 = BnB('../data/Atlanta.tsp', 3)
->>>>>>> 1c19a03f0d98f7b3e4acb20f1779dd8e4dfeeca0
     ls2.main()
     print(ls2.nodes, ls2.seed, ls2.solution, ls2.total_distance)
