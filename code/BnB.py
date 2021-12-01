@@ -32,9 +32,10 @@ class BnB(TSP):
         self.method = 'BnB'
         self.distance_matrix = None
         self.min_distance = None
+        self.mst_stored = {}
 
     # calculate distance between every 2 nodes
-    def calc_distanca_matrix(self):
+    def calc_distance_matrix(self):
         n = len(self.nodes)
         self.distance_matrix = [[ 0 for _ in range(n)] for _ in range(n)]
         for i in range(n):
@@ -80,16 +81,65 @@ class BnB(TSP):
         total_distance += self.distance_matrix[last_visit][0]
         return total_distance, visited
 
-    # The bound is computed as: the current path length + shortest distance path for every unchoosed node
+
+    def calculate_mst(self, nodes):
+        total_distance = 0
+        father = {}
+        edges = []
+        edges_number = 0
+        nodes.sort()
+        str_node = [str(i) for i in nodes]
+        str_key = "".join(str_node)
+        if str_key in self.mst_stored:
+            return self.mst_stored[str_key]
+        n = len(nodes)
+        if n == 1:
+            return 0
+        for node in nodes:
+            father[node] = node
+        for i in range(n):
+            for j in range(i+1, n):
+                distance = self.distance_matrix[nodes[i]][nodes[j]]
+                if distance != 0:
+                    edges.append([distance, nodes[i], nodes[j]])
+        edges.sort()
+        used_edge = []
+        for edge in edges:
+            distance = edge[0]
+            node1 = edge[1]
+            node2 = edge[2]
+            if father[node1] == father[node2]:
+                continue
+            father_node1 = father[node1]
+            father_node2 = father[node2]
+            for node in nodes:
+                if father[node] == father_node2:
+                    father[node] = father_node1
+            total_distance += distance
+            edges_number += 1
+            used_edge.append(edge)
+            if n == edges_number + 1:
+                self.mst_stored[str_key] = total_distance
+                return total_distance
+
+    # The bound is computed as: the current path length + shortest distance path from unvisited nodes to visited nodes
+    # mst of unvisited nodes
     def calculate_bound(self, node):
         total_distance = node.compute_length(self.distance_matrix)
         n = len(self.nodes)
         visited = node.path[:]
+        not_visited = []
+        shortest_distance = float('inf')
         for i in range(n):
             if i not in visited:
-                total_distance += self.min_distance[i]
-        # Eventually, we need to return to node 1
-        total_distance += self.min_distance[0]
+                not_visited.append(i)
+        for i in not_visited:
+            for j in visited:
+                if self.distance_matrix[i][j] != 0 and self.distance_matrix[i][j] < shortest_distance:
+                    shortest_distance = self.distance_matrix[i][j]
+        total_distance += shortest_distance
+        # add mst of unvisited nodes
+        total_distance += self.calculate_mst(not_visited)
         return total_distance
 
     def solve(self):
@@ -107,7 +157,7 @@ class BnB(TSP):
             bound = temp.bound
             time_cost = time.time() - start_time
             if time_cost > self.time:
-                print("break")
+                print("time is up")
                 return
             if bound <= self.total_distance:
                 if len(temp.path) == n - 1:
@@ -134,13 +184,14 @@ class BnB(TSP):
     
     def main(self):
         self.read_file(self.file_name)
-        self.calc_distanca_matrix()
+        self.calc_distance_matrix()
         self.calc_min_distance()
         self.solve()
         self.gen_outputs()
 
 
 if __name__ == '__main__':
-    ls2 = BnB('UKansasState', 3)
+    ls2 = BnB('Berlin', 600)
+    # ls2 = BnB('Cincinnati', 10)
     ls2.main()
     print(ls2.nodes, ls2.seed, ls2.solution, ls2.total_distance)
