@@ -13,7 +13,7 @@ class SimulatedAnnealing(TSP):
         self.method = 'LS1'
         self.distance_matrix = None
         self.temperature = 10000
-        self.ALPHA = 0.98
+        self.ALPHA = 0.95
         self.total_distance = None
         self.attemps = 0
         self.changes = 0
@@ -53,11 +53,13 @@ class SimulatedAnnealing(TSP):
             random_successor = current_route[:]
             length = random.randint(1, n - 1)
             i = random.randint(1, n - length)
-            random_successor[i:i + length] = reversed(random_successor[i: i + length])
+            random_successor[i:i +
+                             length] = reversed(random_successor[i: i + length])
             route_distance = self.calc_total_distance(random_successor)
             # initial temperature setting
             if self.first:
-                self.temperature = (-abs(route_distance - current_distance)/np.log(0.9))
+                self.temperature = (-abs(route_distance -
+                                    current_distance)/np.log(0.9))
                 self.first = False
             self.temperature = self.temperature * self.ALPHA
             if route_distance < current_distance or random.random() < self.metropolis(route_distance, current_distance):
@@ -109,6 +111,6 @@ class SimulatedAnnealing(TSP):
 
 
 if __name__ == '__main__':
-    ls1 = SimulatedAnnealing('Atlanta', 5)
+    ls1 = SimulatedAnnealing('../data/Atlanta.tsp', 5)
     ls1.main()
     print(ls1.total_distance)

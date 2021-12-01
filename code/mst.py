@@ -68,6 +68,6 @@ class MST_APPROX(TSP):
 
 
 if __name__ == '__main__':
-    ls2 = MST_APPROX('Denver', 1, 1)
+    ls2 = MST_APPROX('../data/Atlanta.tsp', 1, 1)
     ls2.main()
     print(ls2.solution, ls2.total_distance)
