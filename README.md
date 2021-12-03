@@ -25,7 +25,7 @@ to solve the TSP problem.
 
 ## 4 Usage
 
-python3 tsp_main.py -inst <filename> -alg [BnB | Approx | LS1 | LS2] -time <cutoff_in_seconds> [-seed <random_seed>]
+python3 tsp_main.py -inst <file_name> -alg [BnB | Approx | LS1 | LS2] -time <cutoff_in_seconds> [-seed <random_seed>]
     
 
 ## 5 Code Structure
