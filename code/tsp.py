@@ -42,7 +42,7 @@ class TSP(object):
                 f.write('{},{}\n'.format(time, quality))
 
     # calculate distance between every 2 nodes
-    def calc_distanca_matrix(self):
+    def calc_distance_matrix(self):
         n = len(self.nodes)
         self.distance_matrix = [[0 for _ in range(n)] for _ in range(n)]
         for i in range(n):

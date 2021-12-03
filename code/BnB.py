@@ -34,16 +34,6 @@ class BnB(TSP):
         self.min_distance = None
         self.mst_stored = {}
 
-    # calculate distance between every 2 nodes
-    def calc_distance_matrix(self):
-        n = len(self.nodes)
-        self.distance_matrix = [[0 for _ in range(n)] for _ in range(n)]
-        for i in range(n):
-            for j in range(i + 1, n):
-                distance = round(dist(self.nodes[i], self.nodes[j]))
-                self.distance_matrix[i][j] = distance
-                self.distance_matrix[j][i] = distance
-
     # calculate the min distance for each node
     def calc_min_distance(self):
         n = len(self.nodes)
@@ -52,14 +42,6 @@ class BnB(TSP):
             for j in range(n):
                 if self.distance_matrix[i][j] != 0 and self.distance_matrix[i][j] < self.min_distance[i]:
                     self.min_distance[i] = self.distance_matrix[i][j]
-
-    # calculate the total distance of current solution
-    def calc_total_distance(self, route):
-        total_distance = 0
-        for i in range(0, len(route)):
-            edge = route[i - 1], route[i]
-            total_distance += self.distance_matrix[edge[0]][edge[1]]
-        return total_distance
 
     # initialize the solution by first using node 1 and then adding the unchosen node which is cloest to the chose nodes
     def initial_solution(self, node):
@@ -80,7 +62,6 @@ class BnB(TSP):
             visited.append(temp_next)
         total_distance += self.distance_matrix[last_visit][0]
         return total_distance, visited
-
 
     def calculate_mst(self, nodes):
         total_distance = 0

@@ -12,16 +12,6 @@ class LocalSearch2OPT(TSP):
         self.method = 'LS2'
         self.distance_matrix = None
 
-    # calculate distance between every 2 nodes
-    def calc_distanca_matrix(self):
-        n = len(self.nodes)
-        self.distance_matrix = [[0 for _ in range(n)] for _ in range(n)]
-        for i in range(n):
-            for j in range(i + 1, n):
-                distance = round(dist(self.nodes[i], self.nodes[j]))
-                self.distance_matrix[i][j] = distance
-                self.distance_matrix[j][i] = distance
-
     # initial solution
     def init_solution(self):
         # r = random.random
@@ -35,14 +25,6 @@ class LocalSearch2OPT(TSP):
         solution = prev_solution[:]
         random.shuffle(solution)
         return solution
-
-    # calculate the total distance of current solution
-    def calc_total_distance(self, route):
-        total_distance = 0
-        for i in range(0, len(route)):
-            edge = route[i - 1], route[i]
-            total_distance += self.distance_matrix[edge[0]][edge[1]]
-        return total_distance
 
     # core algorithm of hill climbing with 2-opt exchange
     def opt_2(self):
@@ -95,7 +77,7 @@ class LocalSearch2OPT(TSP):
 
     def main(self):
         self.read_file(self.file_name)
-        self.calc_distanca_matrix()
+        self.calc_distance_matrix()
         self.init_solution()
         self.opt_2()
         self.gen_outputs()

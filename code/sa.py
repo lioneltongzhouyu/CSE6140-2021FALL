@@ -103,7 +103,7 @@ class SimulatedAnnealing(TSP):
 
     def main(self):
         self.read_file(self.file_name)
-        self.calc_distanca_matrix()
+        self.calc_distance_matrix()
         self.para()
         self.init_solution()
         self.simulated_anneal()
