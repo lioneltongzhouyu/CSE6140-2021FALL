@@ -10,7 +10,8 @@ optimal = {
     'Atlanta': 2003763,
     'Berlin': 7542,
     'Nyc': 1555060,
-    'Champaign': 52643
+    'Champaign': 52643,
+    'Roanoke': 655454
 }
 
 def process_data(p = 0, city = 'Berlin', method ='LS2'):
@@ -192,10 +193,10 @@ def draw_quality_box(city, val, label, method='LS2'):
     plt.savefig("quality_boxplot_{}_{}.png".format(city, method))
     plt.show()
 
-def run_tsp(city):
+def run_tsp(city, k=K):
 
     sum = 0
-    for i in tqdm(range(1, 51)):
+    for i in tqdm(range(1, k+1)):
         
         # ls2 = SimulatedAnnealing('Berlin', 200, i)
         ls2 = LocalSearch2OPT(city, TIME, i)
@@ -211,6 +212,8 @@ if __name__ == '__main__':
     
     # run_tsp('Berlin')
     # run_tsp('Champaign')
+    run_tsp('Roanoke', k=10)
+    
     # runtime_list0 = process_data(0, 'Berlin')
     # runtime_list2 = process_data(0.02)
     # runtime_list4 = process_data(0.04)
@@ -251,19 +254,19 @@ if __name__ == '__main__':
         
     
     
-    quality_list_0 = process_sqd_data(1, 'Berlin')
-    quality_list_2 = process_sqd_data(3)
-    quality_list_4 = process_sqd_data(10)
-    quality_list_6 = process_sqd_data(30)
-    quality_list_8 = process_sqd_data(100)
+    # quality_list_0 = process_sqd_data(1, 'Berlin')
+    # quality_list_2 = process_sqd_data(3)
+    # quality_list_4 = process_sqd_data(10)
+    # quality_list_6 = process_sqd_data(30)
+    # quality_list_8 = process_sqd_data(100)
     
-    draw_sqd_plot(quality_list_0, quality_list_2, quality_list_4, quality_list_6, quality_list_8, 'Berlin')
+    # draw_sqd_plot(quality_list_0, quality_list_2, quality_list_4, quality_list_6, quality_list_8, 'Berlin')
     
     
-    quality_list_0 = process_sqd_data(1, 'Champaign')
-    quality_list_2 = process_sqd_data(3, 'Champaign')
-    quality_list_4 = process_sqd_data(10, 'Champaign')
-    quality_list_6 = process_sqd_data(30, 'Champaign')
-    quality_list_8 = process_sqd_data(100, 'Champaign')
+    # quality_list_0 = process_sqd_data(1, 'Champaign')
+    # quality_list_2 = process_sqd_data(3, 'Champaign')
+    # quality_list_4 = process_sqd_data(10, 'Champaign')
+    # quality_list_6 = process_sqd_data(30, 'Champaign')
+    # quality_list_8 = process_sqd_data(100, 'Champaign')
     
-    draw_sqd_plot(quality_list_0, quality_list_2, quality_list_4, quality_list_6, quality_list_8, city='Champaign')
+    # draw_sqd_plot(quality_list_0, quality_list_2, quality_list_4, quality_list_6, quality_list_8, city='Champaign')
