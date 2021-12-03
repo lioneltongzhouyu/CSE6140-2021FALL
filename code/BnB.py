@@ -1,3 +1,8 @@
+# This is the file for branch and bound algorithm.
+# The BnB class is for main BnB algorithm. Main function is the solve() function. When created, BnB class could take
+# input of the file path and the time to stop.
+# The Node class is a node in BnB algorithm, each node contains the visited path and the function to calculate the
+# length of visited path.
 import random
 import time
 from math import dist
@@ -81,7 +86,7 @@ class BnB(TSP):
         total_distance += self.distance_matrix[last_visit][0]
         return total_distance, visited
 
-
+    # Calculate the length of mininum spanning tree of the nodes parameter
     def calculate_mst(self, nodes):
         total_distance = 0
         father = {}
@@ -194,6 +199,6 @@ class BnB(TSP):
 
 if __name__ == '__main__':
     # ls2 = BnB('Cincinnati', 10)
-    ls2 = BnB('../data/Atlanta.tsp', 3)
+    ls2 = BnB('../data/UMissouri.tsp', 600)
     ls2.main()
     print(ls2.nodes, ls2.seed, ls2.solution, ls2.total_distance)
