@@ -5,7 +5,10 @@ import math
 import numpy as np
 
 
-# local search 1: simulated annealing
+# File for local search 1 simulated annealing.
+# The BnB class is for main SA algorithm. Main function is the solve() function. When created, BnB class could take
+# input of the file path, the time to stop and seed.
+# This algorithm adopted reheating to escape local optimum
 class SimulatedAnnealing(TSP):
 
     def __init__(self, file_name, time, seed=0):
@@ -36,7 +39,7 @@ class SimulatedAnnealing(TSP):
         random_successor[i:i + ln] = reversed(random_successor[i: i + ln])
         return random_successor
 
-    # parameters setting
+    # neighbor size related parameters setting
     def para(self):
         vertices = len(self.nodes)
         self.attemps = 50 * vertices
@@ -49,6 +52,7 @@ class SimulatedAnnealing(TSP):
         n = len(self.nodes)
         current_route = route[:]
         current_distance = distance
+        # stops searching until maximum searches or accepting times are reached
         while nc < self.changes and na < self.attemps:
             random_successor = current_route[:]
             length = random.randint(1, n - 1)
@@ -74,28 +78,28 @@ class SimulatedAnnealing(TSP):
             na += 1
         return current_route, current_distance
 
+    # main funciton of simulated annealing, reheat process is included
     def simulated_anneal(self):
         self.start_time = time.time()
         not_improved = 0
         max_iter_reheat = 5000
         prev_dist = self.total_distance
         prev_route = self.solution[:]
+        # stop criterion setting, including maximum iterations and reheating times
         while not_improved < max_iter_reheat and self.iter < 1e6:
             time_diff = time.time() - self.start_time
             new_route, new_distance = self.search(prev_route, prev_dist)
             self.iter += 1
+            # running time constrains
             if time_diff > self.time:
                 break
             if new_distance != prev_dist:
                 prev_route = new_route
                 prev_dist = new_distance
                 if prev_dist < self.total_distance:
-                    # self.trace.append(
-                    #     ("%.2f" % time_diff, prev_dist))
-                    # self.total_distance = prev_dist
-                    # self.solution = new_route[:]
                     not_improved = 0
             else:
+                # reheat when no better solution is found in one search 
                 random.shuffle(prev_route)
                 prev_dist = self.calc_total_distance(prev_route)
                 self.first = True
