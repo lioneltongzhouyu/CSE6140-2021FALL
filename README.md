@@ -4,9 +4,10 @@
 
 The Traveling Salesman Problem (TSP) arises in numerous applications such as vehicle routing,
 circuit board drilling, VLSI design, robot control, X-ray crystallography, machine scheduling and
-computational biology. In this project, 4 different algorithms to solve TSP problem are implemented
+computational biology. In this project, 4 different algorithms are implemented
 to solve the TSP problem.
-## 3 Group Members
+
+## 2 Group Members
 
 - Jia, Yuqi
 - Wu, Shuyang
@@ -14,7 +15,7 @@ to solve the TSP problem.
 - Yu, Tongzhou
 
 
-## 4 Algorithms
+## 3 Algorithms
 
 - Branch-and-Bound
 - Construction Heuristics
@@ -27,7 +28,7 @@ to solve the TSP problem.
 python3 tsp_main.py -inst <filename> -alg [BnB | Approx | LS1 | LS2] -time <cutoff_in_seconds> [-seed <random_seed>]
     
 
-## Code Structure
+## 5 Code Structure
 
 - tsp_main.py: entry file
 - tsp.py: base class that contains commen methods such as read_file, generate_outputs
