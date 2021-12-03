@@ -1,3 +1,4 @@
+# TSP: base class that contains commen methods such as read_file, generate_outputs
 from math import dist
 import random
 

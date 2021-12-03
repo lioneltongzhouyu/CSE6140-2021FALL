@@ -1,3 +1,5 @@
+# This is the file for local search 2: hill climbing with 2-opt exchange algorithm.
+# LocalSearch2OPT: child class that implments 2-opt Exchange & Hill Climbing algorithm
 import time
 import random
 from math import dist

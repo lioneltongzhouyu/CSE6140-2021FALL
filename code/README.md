@@ -30,11 +30,11 @@ python3 tsp_main.py -inst <file_name> -alg [BnB | Approx | LS1 | LS2] -time <cut
 
 ## 5 Code Structure
 
-- tsp_main.py: entry file
-- tsp.py: base class that contains commen methods such as read_file, generate_outputs
-- Bnb.py: child class that implments Branch-and-Bound algorithm
-- mst.py: child class that implments Construction Heuristics algorithm
-- sa.py: child class that implments Simulated Annealing algorithm
-- local_search_2.py: tsp child class that implments 2-opt Exchange & Hill Climbing algorithm
+- tsp_main.py: Entry file
+- tsp.py: Base class that contains commen methods such as read_file, generate_outputs
+- Bnb.py: Child class that implments Branch-and-Bound algorithm
+- mst.py: Child class that implments Construction Heuristics algorithm
+- sa.py: Child class that implments Simulated Annealing algorithm
+- local_search_2.py: Child class that implments 2-opt Exchange & Hill Climbing algorithm
 
 
