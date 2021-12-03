@@ -3,7 +3,16 @@ from math import dist
 from tsp import TSP
 import heapq
 
-# local search 2: 2-opt exchange
+"""
+Double Minimum Spanning Tree Algorithm
+input:
+    filename: name of the file containing the graph
+    time: time limit for the algorithm
+    begin: starting node
+output:
+    self.solution: list of nodes in the MST
+    self.trace: time and possible result found by the algorithm
+"""
 
 
 class MST_APPROX(TSP):
@@ -13,15 +22,6 @@ class MST_APPROX(TSP):
         self.method = 'Approx'
         self.total_distance = 0
         self.begin = begin
-
-    def calc_distanca_matrix(self):
-        n = len(self.nodes)
-        self.distance_matrix = [[0 for _ in range(n)] for _ in range(n)]
-        for i in range(n):
-            for j in range(i + 1, n):
-                distance = round(dist(self.nodes[i], self.nodes[j]))
-                self.distance_matrix[i][j] = distance
-                self.distance_matrix[j][i] = distance
 
     def MST_prim(self):
         n = len(self.nodes)
@@ -62,7 +62,7 @@ class MST_APPROX(TSP):
 
     def main(self):
         self.read_file(self.file_name)
-        self.calc_distanca_matrix()
+        self.calc_distance_matrix()
         self.trace_MST()
         self.gen_outputs()
 
