@@ -1,3 +1,6 @@
+# entry file of the whole project
+# should be running in the following command:
+# python3 tsp_main.py -inst <file_name> -alg [BnB | Approx | LS1 | LS2] -time <cutoff_in_seconds> [-seed <random_seed>]
 import sys
 import getopt
 from local_search_2 import LocalSearch2OPT
