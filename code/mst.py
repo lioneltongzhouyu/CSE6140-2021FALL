@@ -23,6 +23,7 @@ class MST_APPROX(TSP):
         self.total_distance = 0
         self.begin = begin
 
+    # generate MST with Prim's algorithm
     def MST_prim(self):
         n = len(self.nodes)
         self.adj_list = [[] for _ in range(n)]
@@ -35,6 +36,7 @@ class MST_APPROX(TSP):
                 continue
             visited[node] = True
             if parent != -1:
+                # since MST is in one direction, add the edge in one direction is enough
                 self.adj_list[parent].append(node)
             for v in range(n):
                 if not visited[v]:
@@ -43,6 +45,7 @@ class MST_APPROX(TSP):
             if all(visited):
                 break
 
+    # traverse the tree in preorder to achieve the order algorithm needs
     def preorder(self, node):
         if not self.adj_list[node]:
             return [node]
